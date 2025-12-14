@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// VIOLATION: God class that does everything
+// VIOLATION: class that does everything
 // VIOLATION: Mixing JPA and JDBC
 // VIOLATION: Business logic in utility class
 @Component
