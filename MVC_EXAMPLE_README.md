@@ -8,7 +8,8 @@ This is a complete MVC (Model-View-Controller) example using Spring Boot 3.4.4 w
 - **Model**: `ExampleUser` entity with JPA annotations
 - **Repository**: `ExampleUserRepository` extending JpaRepository
 - **Service**: `ExampleUserService` handling business logic
-- **Controller**: `ExampleUserController` exposing REST API at `/api/example/v1`
+- **Controller**: `ExampleUserController` exposing REST API at `/example/api/example/v1`
+- **Context Path**: Application runs under `/example` context path
 
 ### Frontend (React + Vite)
 - Located in `frontend/` directory
@@ -18,17 +19,17 @@ This is a complete MVC (Model-View-Controller) example using Spring Boot 3.4.4 w
 ### Database
 - H2 in-memory database
 - Sample data pre-loaded via `data.sql`
-- Console available at: `http://localhost:8080/h2-console`
+- Console available at: `http://localhost:8080/example/h2-console`
 
 ## API Endpoints
 
-Base URL: `/api/example/v1/users`
+Base URL: `/example/api/example/v1/users`
 
-- `GET /api/example/v1/users` - Get all users
-- `GET /api/example/v1/users/{id}` - Get user by ID
-- `POST /api/example/v1/users` - Create new user
-- `PUT /api/example/v1/users/{id}` - Update user
-- `DELETE /api/example/v1/users/{id}` - Delete user
+- `GET /example/api/example/v1/users` - Get all users
+- `GET /example/api/example/v1/users/{id}` - Get user by ID
+- `POST /example/api/example/v1/users` - Create new user
+- `PUT /example/api/example/v1/users/{id}` - Update user
+- `DELETE /example/api/example/v1/users/{id}` - Delete user
 
 ## Running the Application
 
@@ -40,9 +41,9 @@ java -jar target/code-review-challenge-0.0.1-SNAPSHOT.jar
 ```
 
 Access the application:
-- Frontend UI: http://localhost:8080/example-ui
-- API: http://localhost:8080/api/example/v1/users
-- H2 Console: http://localhost:8080/h2-console
+- Frontend UI: http://localhost:8080/example/example-ui
+- API: http://localhost:8080/example/api/example/v1/users
+- H2 Console: http://localhost:8080/example/h2-console
 
 ### Option 2: Development Mode
 
@@ -59,9 +60,10 @@ npm run dev
 ```
 
 In development mode:
-- Backend runs on: http://localhost:8080
+- Backend runs on: http://localhost:8080/example
 - Frontend dev server runs on: http://localhost:3000
 - API calls are proxied from frontend to backend
+- Access frontend dev at: http://localhost:3000/example/example-ui/
 
 ## Project Structure
 
@@ -95,6 +97,11 @@ interview/
 
 ## Key Configuration Details
 
+### Server Configuration (application.properties)
+- **Context Path**: `server.servlet.context-path=/example`
+- All endpoints are prefixed with `/example`
+- Port: `8080`
+
 ### Maven Frontend Plugin (pom.xml)
 The frontend build is integrated into Maven lifecycle:
 - Installs Node.js and npm automatically
@@ -102,13 +109,13 @@ The frontend build is integrated into Maven lifecycle:
 - Copies built frontend to `target/classes/static/example-ui`
 
 ### Spring Boot Static Resources (WebConfig.java)
-- Serves React app from `/example-ui` path
+- Serves React app from `/example-ui` path (under context path `/example`)
 - Implements SPA routing (all non-existent paths return `index.html`)
 - Allows React Router to handle client-side routing
 
 ### Vite Configuration (vite.config.js)
-- Base path set to `/example-ui/` to match Spring Boot serving path
-- Proxy configured for `/api` requests to backend during development
+- Base path set to `/example/example-ui/` to match Spring Boot context path and serving path
+- Proxy configured for `/example/api` requests to backend during development
 
 ## Technologies Used
 
@@ -171,7 +178,9 @@ The application comes pre-loaded with 5 sample users:
 
 ## Notes
 
+- **Context Path**: The application runs under `/example` context path. All URLs must include this prefix.
 - The H2 database is in-memory and will reset on each application restart
 - Frontend is automatically built and bundled during `mvn clean install`
 - For production, consider using a persistent database (PostgreSQL, MySQL, etc.)
 - CORS is enabled for all origins in development (`@CrossOrigin(origins = "*")`)
+- To change the context path, modify `server.servlet.context-path` in `application.properties` and update frontend URLs accordingly
